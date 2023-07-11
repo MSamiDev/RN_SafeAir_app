@@ -1,29 +1,37 @@
 import {StyleSheet, Text, View, TouchableOpacity, Button} from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../App';
+import auth, {FirebaseAuthTypes, firebase} from '@react-native-firebase/auth';
 
 type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
 const Home = ({navigation}: HomeProps) => {
+  // Set an initializing state whilst Firebase connects
+  useEffect(() => {
+    const usr = firebase.auth().currentUser;
+    if (usr) {
+    }
+  }, []);
+
+  // if (initializing) return null;
+
   return (
     <View style={styles.mainContainer}>
       <View style={styles.container}>
         <TouchableOpacity
-        style={styles.button}
-          onPress={() => navigation.navigate('SignIn')}
-        >
-      <Text style={styles.buttonText}>SignIn</Text>
-
+          style={styles.button}
+          onPress={() => navigation.replace('SignIn')}>
+          <Text style={styles.buttonText}>SignIn</Text>
         </TouchableOpacity>
-      
-        <TouchableOpacity
+
+        {/* <TouchableOpacity
         style={styles.button}
-          onPress={() => navigation.navigate('SendLoc')}
+          onPress={() => navigation.navigate('SendLoc', {email: email})}
         >
       <Text style={styles.buttonText}>Send Location</Text>
 
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </View>
   );

@@ -6,37 +6,49 @@ import {
   Button,
   PermissionsAndroid,
   Platform,
+  Alert,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../App';
 import database from '@react-native-firebase/database';
-import {firebase} from '@react-native-firebase/database';
 import Geolocation, {
   GeolocationResponse,
   GeolocationError,
 } from '@react-native-community/geolocation';
 import ReactNativeForegroundService from '@supersami/rn-foreground-service';
-
-// import Geolocation, {
-//   GeolocationResponse,
-// } from '@react-native-community/geolocation';
-
-const reference = firebase
-  .app()
-  .database(
-    'https://safeair-b0c14-default-rtdb.asia-southeast1.firebasedatabase.app',
-  )
-  .ref('/locations/3');
-
-//
+import auth, {FirebaseAuthTypes, firebase} from '@react-native-firebase/auth';
+import Home from './Home';
 
 type SendLocProps = NativeStackScreenProps<RootStackParamList, 'SendLoc'>;
 
-const SendLoc = ({navigation}: SendLocProps) => {
-
+const SendLoc = ({navigation, route}: SendLocProps) => {
   const [location, setLocation] = useState<GeolocationResponse | null>(null);
   const [watchId, setWatchId] = useState<number | null>(null);
+
+  const [email, setEmail] = useState<string | null | undefined>(null);
+
+  const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
+
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(user => {
+      console.log('user', JSON.stringify(user));
+      setUser(user);
+      
+    });
+
+    return subscriber;
+  }, []);
+
+  // useEffect(() => {
+  //   const usr = firebase.auth().currentUser;
+  //   if (usr) {
+
+  //     setEmail(usr.email);
+  //     console.log(email);
+  //   }
+
+  // }, [])
 
   const startTracking = () => {
     const id = Geolocation.watchPosition(
@@ -67,7 +79,7 @@ const SendLoc = ({navigation}: SendLocProps) => {
   };
 
   useEffect(() => {
-    ReactNativeForegroundService.add_task( () => startTracking(), {
+    ReactNativeForegroundService.add_task(() => startTracking(), {
       delay: 1000,
       onLoop: true,
       taskId: 'taskid',
@@ -106,22 +118,53 @@ const SendLoc = ({navigation}: SendLocProps) => {
     ReactNativeForegroundService.stop();
   };
 
+  const signOut = () => {
+    Alert.alert(
+      'Logout',
+      'Are you sure? You want to logout?',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => {
+            return null;
+          },
+        },
+        {
+          text: 'Confirm',
+          onPress: () => {
+            auth()
+              .signOut()
+              .then(() => console.log('User signed out!'))
+              .then(() => navigation.replace('SignIn'));
+          },
+        },
+      ],
+      {cancelable: false},
+    );
+  };
 
   return (
-    <View style={styles.ButtonContainer}>
-      <Text style={styles.Heading}>Send Location</Text>
-      <TouchableOpacity style={styles.button} onPress={StartTask}>
-        <Text style={styles.buttonText}>START</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={stopTracking}>
-        <Text style={styles.buttonText}>STOP</Text>
-      </TouchableOpacity>
-      {location && (
-        <Text style={styles.locationText}>
-          Latitude: {location.coords.latitude}, Longitude:
-          {location.coords.longitude}
-        </Text>
-      )}
+    <View style={styles.TopContainer}>
+      <View>
+        <Text style={styles.Heading}>Send Location</Text>
+        <TouchableOpacity style={styles.button} onPress={StartTask}>
+          <Text style={styles.buttonText}>START</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={stopTracking}>
+          <Text style={styles.buttonText}>STOP</Text>
+        </TouchableOpacity>
+        {location && (
+          <Text style={styles.locationText}>
+            Latitude: {location.coords.latitude}, Longitude:
+            {location.coords.longitude}
+          </Text>
+        )}
+      </View>
+      <View style={styles.ButtonContainer}>
+        <TouchableOpacity style={styles.buttonSignout} onPress={signOut}>
+          <Text style={styles.SignOutbuttonText}>SignOut</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -136,12 +179,17 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 30,
   },
-  ButtonContainer: {
+  TopContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
     width: '100%',
+  },
+  ButtonContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
   },
   button: {
     backgroundColor: '#2B50D9',
@@ -149,11 +197,26 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 24,
     alignSelf: 'center',
+    marginVertical: 10,
   },
   buttonText: {
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  buttonSignout: {
+    backgroundColor: '#2E2E2E',
+    borderRadius: 25,
+    paddingVertical: 9,
+    paddingHorizontal: 24,
+    alignSelf: 'center',
+    marginVertical: 10,
+  },
+  SignOutbuttonText: {
+    color: 'white',
+    fontSize: 12,
+    fontWeight: '300',
     textAlign: 'center',
   },
   locationText: {
