@@ -33,35 +33,7 @@ const reference = firebase
 
 type SendLocProps = NativeStackScreenProps<RootStackParamList, 'SendLoc'>;
 
-// const requestLocationPermission = async () => {
-//     try {
-//       const granted = await PermissionsAndroid.request(
-//         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-//         {
-//           title: 'Geolocation Permission',
-//           message: 'Can we access your location?',
-//           buttonNeutral: 'Ask Me Later',
-//           buttonNegative: 'Cancel',
-//           buttonPositive: 'OK',
-//         },
-//       );
-//       console.log('granted', granted);
-//       if (granted === 'granted') {
-//         console.log('You can use Geolocation');
-//         return true;
-//       } else {
-//         console.log('You cannot use Geolocation');
-//         return false;
-//       }
-//     } catch (err) {
-//       return false;
-//     }
-//   };
-
 const SendLoc = ({navigation}: SendLocProps) => {
-  // const [location, setLocation] = useState({});
-  // const [location, setLocation] = useState<GeolocationResponse | null>(null);
-  // const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
 
   const [location, setLocation] = useState<GeolocationResponse | null>(null);
   const [watchId, setWatchId] = useState<number | null>(null);
@@ -94,107 +66,6 @@ const SendLoc = ({navigation}: SendLocProps) => {
     setWatchId(id);
   };
 
-  // useEffect(() => {
-  //   return () => {
-  //     stopTracking(); // Stop observing location updates when the component unmounts
-  //   };
-  // }, []);
-  // ------------------------------------------------
-  // const [location, setLocation] = useState<Location | null>(null);
-
-  // const startTracking = () => {
-  //   BackgroundGeolocation.start(); // Start tracking location in the background
-
-  //   BackgroundGeolocation.onLocation((location: Location) => {
-  //     setLocation(location);
-  //   });
-
-  //   BackgroundGeolocation.onLocationError((error: Error) => {
-  //     console.error('Error fetching location:', error);
-  //   });
-  // };
-
-  // const stopTracking = () => {
-  //   BackgroundGeolocation.stop(); // Stop tracking location in the background
-  // };
-
-  // useEffect(() => {
-  //   BackgroundGeolocation.checkStatus((status: any) => {
-  //     if (!status.isRunning) {
-  //       startTracking();
-  //     }
-  //   });
-
-  //   return () => {
-  //     BackgroundGeolocation.removeAllListeners(); // Clean up event listeners when component unmounts
-  //   };
-  // }, []);
-
-  // ------------------------------------------------
-
-  // const startFetchingLocation = () => {
-  //   const id = setInterval(fetchLocation, 30000); // Fetch location every 30 seconds
-  //   setIntervalId(id);
-  //   fetchLocation(); // Fetch location immediately
-  // };
-
-  // const fetchLocation = () => {
-  //   Geolocation.getCurrentPosition(
-  //     position => {
-  //       setLocation(position);
-  //       console.log(position);
-  //       database()
-  //         .ref('/locations/3')
-  //         .set({
-  //           latitude: position.coords.latitude,
-  //           longitude: position.coords.longitude,
-  //           timestamp: Date()
-  //         })
-  //         .then(() => console.log('Data set.'));
-  //     },
-  //     error => {
-  //       console.error('Error fetching location:', error);
-  //     },
-  //   );
-  // };
-
-  // const stopFetchingLocation = () => {
-  //   if (intervalId) {
-  //     clearInterval(intervalId);
-  //     setIntervalId(null);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (intervalId) {
-  //     fetchLocation(); // Fetch location immediately on app start
-  //   }
-  // }, [intervalId]);
-
-  // ------------------------------------------------
-
-  //   const getLocation = () => {
-  //     const result = requestLocationPermission();
-  //     result.then(res => {
-  //       console.log('res is:', res);
-  //       if (res) {
-  //         Geolocation.watchPosition(
-  //           position => {
-  //             console.log(position);
-  //             setLocation(position);
-  //           },
-  //           error => {
-  //             // See error code charts below.
-  //             console.log(error.code, error.message);
-  //             setLocation(false);
-  //           },
-  //           {enableHighAccuracy: true, distanceFilter: 10, interval: 1000},
-  //         );
-  //       }
-  //     });
-  //     console.log(location);
-  //   };
-
   useEffect(() => {
     ReactNativeForegroundService.add_task( () => startTracking(), {
       delay: 1000,
@@ -226,6 +97,8 @@ const SendLoc = ({navigation}: SendLocProps) => {
       button2Text: 'Stop',
       buttonOnPress: 'cray',
       color: '#000000',
+      visibility: 'public',
+      importance: 'max',
     });
   };
 
