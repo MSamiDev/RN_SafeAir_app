@@ -85,7 +85,7 @@ const SignIn = ({navigation}: SignInProps) => {
 
           <Text style={styles.subtitle}>Sign in to your account</Text>
 
-          <SizedBox height={32} />
+          <SizedBox height={70} />
 
           <Pressable>
             <View style={styles.form}>
@@ -150,15 +150,18 @@ const styles = StyleSheet.create({
   button: {
     alignItems: 'center',
     backgroundColor: '#2B50D9',
-    borderRadius: 8,
+    borderRadius: 30,
     height: 48,
     justifyContent: 'center',
+    marginVertical: 16,
+
   },
   buttonTitle: {
     color: '#FFFFFF',
     fontSize: 17,
     fontWeight: '600',
     lineHeight: 22,
+    marginVertical: 8,
   },
   content: {
     flex: 1,
@@ -172,7 +175,7 @@ const styles = StyleSheet.create({
   form: {
     alignItems: 'center',
     backgroundColor: 'rgb(58, 58, 60)',
-    borderRadius: 8,
+    borderRadius: 30,
     flexDirection: 'row',
     height: 48,
     paddingHorizontal: 16,
@@ -185,7 +188,7 @@ const styles = StyleSheet.create({
     width: 80,
   },
   root: {
-    backgroundColor: '#ffffff',
+    backgroundColor: '#111',
     flex: 1,
   },
   safeAreaView: {
@@ -202,13 +205,14 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '400',
     lineHeight: 20,
+
   },
   textInput: {
     color: '#FFFFFF',
     flex: 1,
   },
   title: {
-    color: '#0D0D0D',
+    color: '#fff',
     fontSize: 32,
     fontWeight: '700',
     lineHeight: 34,

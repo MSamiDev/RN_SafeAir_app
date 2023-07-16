@@ -7,6 +7,7 @@ import {
   PermissionsAndroid,
   Platform,
   Alert,
+  Image,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -185,14 +186,15 @@ const SendLoc = ({navigation, route}: SendLocProps) => {
 
   return (
     <View style={styles.TopContainer}>
-      <View>
+      {/* <View style={st}> */}
+      <Image style={styles.image} source={require("../assets/7881.png")} />
 
         <Text style={styles.Heading}>Send Location</Text>
-        <Text> {emailid}</Text>
+        {/* <Text> {emailid}</Text> */}
         <TouchableOpacity style={styles.button} onPress={StartTask}>
           <Text style={styles.buttonText}>START</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={stopTracking}>
+        <TouchableOpacity style={[styles.button, styles.stopButton]} onPress={stopTracking}>
           <Text style={styles.buttonText}>STOP</Text>
         </TouchableOpacity>
         {location && (
@@ -201,12 +203,12 @@ const SendLoc = ({navigation, route}: SendLocProps) => {
             {location.coords.longitude}
           </Text>
         )}
-      </View>
-      <View style={styles.ButtonContainer}>
+      {/* </View> */}
+      {/* <View style={styles.ButtonContainer}> */}
         <TouchableOpacity style={styles.buttonSignout} onPress={signOut}>
           <Text style={styles.SignOutbuttonText}>SignOut</Text>
         </TouchableOpacity>
-      </View>
+      {/* </View> */}
     </View>
   );
 };
@@ -214,18 +216,25 @@ const SendLoc = ({navigation, route}: SendLocProps) => {
 export default SendLoc;
 
 const styles = StyleSheet.create({
+  image:{
+    height: 250,
+    width: 350,
+    alignSelf: 'center',
+    opacity: 0.8,
+  },
   Heading: {
     fontSize: 30,
     fontWeight: 'bold',
-    color: '#000',
-    textAlign: 'center',
+    color: '#fff',
+    // textAlign: 'center',
     marginTop: 30,
+    marginHorizontal: 20,
   },
   TopContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#fff',
+    justifyContent: 'flex-end',
+    // alignItems: 'center',
+    backgroundColor: '#111',
     width: '100%',
   },
   ButtonContainer: {
@@ -238,8 +247,12 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     paddingVertical: 12,
     paddingHorizontal: 24,
-    alignSelf: 'center',
-    marginVertical: 10,
+    // alignSelf: 'center',
+    marginHorizontal: 20,
+    marginVertical: 20,
+  },
+  stopButton: {
+    backgroundColor: '#D92B2B',
   },
   buttonText: {
     color: 'white',
@@ -249,11 +262,11 @@ const styles = StyleSheet.create({
   },
   buttonSignout: {
     backgroundColor: '#2E2E2E',
-    borderRadius: 25,
+    borderRadius: 30,
     paddingVertical: 9,
     paddingHorizontal: 24,
     alignSelf: 'center',
-    marginVertical: 10,
+    marginVertical: 50,
   },
   SignOutbuttonText: {
     color: 'white',

@@ -27,6 +27,8 @@ import SignIn from './screens/SignIn';
 import Home from './screens/Home';
 import SendLoc from './screens/SendLoc';
 import { useRoute } from '@react-navigation/native';
+import { HeaderStyleInterpolators } from '@react-navigation/stack';
+
 
 
 export type RootStackParamList = {
@@ -45,7 +47,7 @@ function App({navigation}: SendLocProps): JSX.Element {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Home" component={Home} options={{title: 'Home'}} />
+        <Stack.Screen name="Home" component={Home} options={{title: 'Home' }} />
         <Stack.Screen
           name="SignIn"
           component={SignIn}
