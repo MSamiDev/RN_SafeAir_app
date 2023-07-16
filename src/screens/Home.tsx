@@ -27,7 +27,7 @@ const Home = ({navigation}: HomeProps) => {
 
         {/* <TouchableOpacity
         style={styles.button}
-          onPress={() => navigation.navigate('SendLoc', {email: email})}
+          onPress={() => navigation.navigate('SendLoc')}
         >
       <Text style={styles.buttonText}>Send Location</Text>
 

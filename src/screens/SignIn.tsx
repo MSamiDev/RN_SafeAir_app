@@ -20,6 +20,8 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import SendLoc from './SendLoc';
 import Home from './Home';
 import SizedBox from '../components/SizedBox';
+import { useRoute } from '@react-navigation/native';
+
 
 type SignInProps = NativeStackScreenProps<RootStackParamList, 'SignIn'>;
 
@@ -45,7 +47,7 @@ const SignIn = ({navigation}: SignInProps) => {
 
   useEffect(() => {
     if (user) {
-      () => navigation.replace('SendLoc', {email: email});
+      () => navigation.replace('SendLoc', {emailid: email});
     }
   }, []);
 
@@ -56,7 +58,7 @@ const SignIn = ({navigation}: SignInProps) => {
         console.log('User account created & signed in!');
       })
       .then(() => {
-        navigation.replace('SendLoc', {email: email});
+        navigation.replace('SendLoc', {emailid : email});
       })
       .catch(error => {
         if (error.code === 'auth/email-already-in-use') {

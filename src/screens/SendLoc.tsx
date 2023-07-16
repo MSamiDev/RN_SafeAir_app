@@ -19,26 +19,36 @@ import Geolocation, {
 import ReactNativeForegroundService from '@supersami/rn-foreground-service';
 import auth, {FirebaseAuthTypes, firebase} from '@react-native-firebase/auth';
 import Home from './Home';
-
+// import { useRoute } from '@react-navigation/native';
 type SendLocProps = NativeStackScreenProps<RootStackParamList, 'SendLoc'>;
 
 const SendLoc = ({navigation, route}: SendLocProps) => {
+  // const route = useRoute();
   const [location, setLocation] = useState<GeolocationResponse | null>(null);
   const [watchId, setWatchId] = useState<number | null>(null);
 
-  const [email, setEmail] = useState<string | null | undefined>(null);
+  //const [email, setEmail] = useState<string | null | undefined>(null);
 
   const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
+  
+  // const email = route.params
+  const emailid : any  = route.params?.emailid;
+  console.log(emailid);
 
-  useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(user => {
-      console.log('user', JSON.stringify(user));
-      setUser(user);
-      
-    });
+  // useEffect(() => {
+  //   const subscriber = auth().onAuthStateChanged(user => {
+  //     console.log('user', JSON.stringify(user));
+  //     setUser(user);
+  //   });
 
-    return subscriber;
-  }, []);
+
+  //   // setEmail(email)
+  //   //   console.log("Send Loc")
+  //   //   console.log(email)
+
+
+  //   return subscriber;
+  // }, []);
 
   // useEffect(() => {
   //   const usr = firebase.auth().currentUser;
@@ -56,14 +66,44 @@ const SendLoc = ({navigation, route}: SendLocProps) => {
         setLocation(position);
         console.log(position);
         console.log('watching');
-        database()
-          .ref('/locations/3')
-          .set({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-            timestamp: Date(),
-          })
-          .then(() => console.log('Data set.'));
+        console.log(emailid);
+        // --------check user 
+         auth().onAuthStateChanged(user => {
+          console.log('user', JSON.stringify(user));
+
+          database()
+            .ref("/locations/" + user?.uid)
+            .set({
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+              timestamp: Date(),
+              email: user?.email,
+            })
+
+          setUser(user);
+        });
+        // if ( email != null ){
+        //   database()
+        //     .ref('/locations/' + email)
+        //     .set({
+        //       latitude: position.coords.latitude,
+        //       longitude: position.coords.longitude,
+        //       timestamp: Date(),
+        //     })
+        //     .then(() => console.log('Data set.'));
+
+        // }
+
+        // if (user) {
+          // database()
+          //   .ref("/locations/")
+          //   .set({
+          //     latitude: position.coords.latitude,
+          //     longitude: position.coords.longitude,
+          //     timestamp: Date(),
+          //     email: emailid,
+          //   })
+          // }q
       },
       (error: GeolocationError) => {
         console.error('Error fetching location:', error);
@@ -80,12 +120,12 @@ const SendLoc = ({navigation, route}: SendLocProps) => {
 
   useEffect(() => {
     ReactNativeForegroundService.add_task(() => startTracking(), {
-      delay: 1000,
+      delay: 5000,
       onLoop: true,
       taskId: 'taskid',
       onError: e => console.log(`Error logging:`, e),
     });
-  }, []);
+  }, [user]);
 
   const stopTracking = () => {
     if (watchId) {
@@ -146,7 +186,9 @@ const SendLoc = ({navigation, route}: SendLocProps) => {
   return (
     <View style={styles.TopContainer}>
       <View>
+
         <Text style={styles.Heading}>Send Location</Text>
+        <Text> {emailid}</Text>
         <TouchableOpacity style={styles.button} onPress={StartTask}>
           <Text style={styles.buttonText}>START</Text>
         </TouchableOpacity>

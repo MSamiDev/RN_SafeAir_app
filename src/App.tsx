@@ -26,11 +26,13 @@ import {
 import SignIn from './screens/SignIn';
 import Home from './screens/Home';
 import SendLoc from './screens/SendLoc';
+import { useRoute } from '@react-navigation/native';
+
 
 export type RootStackParamList = {
   Home: undefined;
   SignIn: undefined;
-  SendLoc: {email: string};
+  SendLoc: { emailid : string };
 };
 type SendLocProps = NativeStackScreenProps<RootStackParamList, 'SendLoc'>;
 
