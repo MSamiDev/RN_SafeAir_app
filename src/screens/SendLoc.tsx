@@ -79,6 +79,7 @@ const SendLoc = ({navigation, route}: SendLocProps) => {
               longitude: position.coords.longitude,
               timestamp: Date(),
               email: user?.email,
+              name: user?.displayName,
             })
 
           setUser(user);
